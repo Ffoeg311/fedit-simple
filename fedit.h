@@ -16,16 +16,13 @@ public:
     ~Fedit();
 
 private slots:
-    void on_openButtonEditor_clicked();
-    void on_saveButtonEditor_clicked();
-    void on_searchButtonEdit_clicked();
-    void on_cancelButton_ow_clicked();
-    void on_openButton_ow_clicked();
+    void on_openButton_clicked();
+    void on_saveButton_clicked();
+    void on_searchButton_clicked();
 
 private:
     Ui::Fedit *ui;
-    void switchToOpenWidget();
-    void switchToEditorWidget();
+    void openFile();
 };
 
 #endif // FEDIT_H

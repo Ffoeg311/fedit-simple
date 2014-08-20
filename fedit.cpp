@@ -1,6 +1,8 @@
 #include "fedit.h"
 #include "ui_fedit.h"
 #include <QFileDialog>
+#include <QFile>
+#include <QTextStream>
 #include <iostream> //for testing
 
 Fedit::Fedit(QWidget *parent) :
@@ -18,45 +20,44 @@ Fedit::~Fedit()
 
 /*Methods for the textEditorPage buttons*/
 
-void Fedit::on_openButtonEditor_clicked()
+void Fedit::on_openButton_clicked()
 {
-    std::cout << "hello open button" << std::endl; //SC
-    switchToOpenWidget();
+    //std::cout << "hello open button" << std::endl; //SC
+    openFile();
 }
 
-void Fedit::on_saveButtonEditor_clicked()
+void Fedit::on_saveButton_clicked()
 {
     std::cout << "hello save button" << std::endl; //SC
 }
 
-void Fedit::on_searchButtonEdit_clicked()
+void Fedit::on_searchButton_clicked()
 {
     std::cout << "hello search button" << std::endl; //SC
 }
 
 /*Methods for openFilePage buttons*/
 
-void Fedit::on_cancelButton_ow_clicked()
-{
-    //std::cout << "hello cancel button" << std::endl; //SC
-    switchToEditorWidget();
-}
-
-void Fedit::on_openButton_ow_clicked()
-{
-    //std::cout << "hello open button" << std::endl; //SC
-}
-
 /*Helper methods*/
 
-void Fedit::switchToOpenWidget()
+void Fedit::openFile()
 {
-    QFileDialog::getOpenFileName(this,
-         tr("Open File"));
-}
+    QFileDialog dialog;
+    QString fileName = dialog.getOpenFileName(this,
+                           tr("Open File"));
+    std::string test = fileName.toStdString();
+    std::cout << test << std::endl; //SC
 
-void Fedit::switchToEditorWidget(){
-    std::cout << "switching" << std::endl; //SC
-    ui->stackedWidget->setCurrentWidget(ui->textEditorPage);
+    //Open the requested file
+    QFile inputFile(fileName);
+    inputFile.open(QIODevice::ReadWrite);
+
+    //Load the requested file into memory
+    QTextStream in(&inputFile);
+    QString line = in.readAll();
+    inputFile.close();
+
+    //Spit the file onto the qlabel
+    ui->textEdit->setText(line);
 }
 
