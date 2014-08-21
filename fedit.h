@@ -17,13 +17,22 @@ public:
 
 private slots:
     void on_openButton_clicked();
+    void on_saveAsButton_clicked();
+    void on_newButton_clicked();
     void on_saveButton_clicked();
-    void on_searchButton_clicked();
 
 private:
     Ui::Fedit *ui;
-    void openFile();
+    QString saveFileName;
+
+private:
+    void newFile();
+    bool warnUserNew();
+    void emptyTextEditor();
+    void open();
+    void openFile(const QString &fileName);
     void saveFileAs();
+    void save();
     void saveFile(const QString &fileName);
 };
 
