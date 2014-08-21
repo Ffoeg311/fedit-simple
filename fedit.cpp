@@ -37,8 +37,8 @@ void Fedit::on_searchButton_clicked()
 
 /*Helper methods*/
 
-void Fedit::openFile()
-{
+void Fedit::openFile(){
+    //Display an open file dialog
     QFileDialog dialog;
     QString fileName = dialog.getOpenFileName(this,
                            tr("Open File"));
@@ -57,8 +57,7 @@ void Fedit::openFile()
 }
 
 //Prompts the user with a file-dialog and returns the selected file name.
-void Fedit::saveFileAs()
-{
+void Fedit::saveFileAs(){
     //Prompt the user for an output file
     QFileDialog dialog;
     QString fileName =
@@ -70,11 +69,14 @@ void Fedit::saveFileAs()
 
 //Saves the text in the textEdit widget to a file of the passed-in name.
 void Fedit::saveFile(const QString &fileName){
+
     //Initialize the output file
     QFile file(fileName);
+    file.open(QFile::WriteOnly | QFile::Text);
 
-    //Load the textEdit into memory
-    QString outputString = ui->textEdit->toPlainText();
+    //Write the textEdit contents to the output file
+    QTextStream out(&file);
+    out << ui->textEdit->toPlainText();
 }
 
 
