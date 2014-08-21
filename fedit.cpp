@@ -12,7 +12,7 @@ Fedit::Fedit(QWidget *parent) :
     ui(new Ui::Fedit)
 {
     ui->setupUi(this);
-    saveFileName = new QString;
+    saveFileName = NULL;
 }
 
 Fedit::~Fedit()
@@ -52,14 +52,24 @@ void Fedit::on_actionSave_As_triggered(){
     std::cout<< "hello save as!" << std::endl;
 }
 
-/*Helper methods****************************************************/
-
+/*Helper methods*/
 void Fedit::newFile()
 {
     //only continue if the user says its ok.
     if(warnUserNew()){
         emptyTextEditor();
-        saveFileName = NULL;
+        saveFileName = NULL; //dealocate saveFileName first?
+        updateMenuBarTitle();
+    }
+}
+
+//STUB
+void Fedit::updateMenuBarTitle(){
+    if(saveFileName == NULL){
+        //std::cout << "hello update menu title" << std::endl; //SC
+        this->setWindowTitle("Fedit: untitled");
+    }else{
+        this->setWindowTitle(*saveFileName);
     }
 }
 
@@ -113,9 +123,10 @@ void Fedit::openFile(const QString &fileName)
 
     //Let future file-saves to know to save it here.
     *saveFileName = fileName;
+    updateMenuBarTitle();
 }
 
-//Prompts the user with a file-dialog saves it.
+//Prompts the user with a file-dialog and saves it.
 void Fedit::saveFileAs()
 {
     QFileDialog dialog;
@@ -124,11 +135,17 @@ void Fedit::saveFileAs()
     save();
 }
 
+//Saves the current file
 void Fedit::save(){
-    saveFile(*saveFileName);
+    if(saveFileName == NULL){
+        saveFileName = new QString;
+        saveFileAs();
+    }else{
+        saveFile(*saveFileName);
+    }
 }
 
-//Saves the text in the textEdit widget to a file of the passed-in name.
+//Saves the text in the textEdit widget to a file with the passed-in name.
 void Fedit::saveFile(const QString &fileName)
 {
     //Initialize the output file and open it
@@ -139,6 +156,7 @@ void Fedit::saveFile(const QString &fileName)
     QTextStream out(&file);
     out << ui->textEdit->toPlainText();
     file.close();
+    updateMenuBarTitle();
 }
 
 
