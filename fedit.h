@@ -23,6 +23,8 @@ private slots:
 private:
     Ui::Fedit *ui;
     void openFile();
+    void saveFileAs();
+    void saveFile(const QString &fileName);
 };
 
 #endif // FEDIT_H
